@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magic English Games</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #5271ff 0%, #ff1616 100%);
+      color: #fff;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .banner-container {
+  width: 100%;
+  margin: 0 0 30px 0;
+  padding: 0;
+}
+
+.banner {
+  width: 105%;
+  height: 350px;
+  background: linear-gradient(135deg, rgba(82,113,255,0.3) 0%, rgba(255,22,22,0.3) 100%);
+  border-radius: 0;  /* ← убрали скругление */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 600;
+  border: none;  /* ← убрали рамку */
+  color: rgba(255,255,255,0.6);
+  overflow: hidden;
+}
+
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;  
+    }
+
+    .content-wrapper {
+      padding: 0 20px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .search-container {
+      max-width: 800px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 50px 16px 20px;
+      font-size: 1.1rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #fff;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      pointer-events: none;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.7);
+    }
+	.footer {
+  text-align: center;
+  padding: 60px 20px 40px;
+  margin-top: 40px;
+}
+
+.subscribe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #5271ff 0%, #ff1616 100%);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 18px 40px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(82,113,255,0.4);
+}
+
+.subscribe-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(82,113,255,0.6);
+}
+
+.subscribe-btn:focus {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .section-title {
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      margin-bottom: 20px;
+      padding-left: 10px;
+    }
+
+    .carousel-container {
+      position: relative;
+      padding: 0 50px;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 10px 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.3) transparent;
+    }
+
+    .carousel::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .carousel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .carousel::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 4px;
+    }
+
+    .card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .card:focus {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .card-preview {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+
+    .card-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.9);
+      color: #667eea;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+      z-index: 10;
+    }
+
+    .nav-btn:hover {
+      background: #fff;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .nav-btn:focus {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .nav-btn.prev {
+      left: 0;
+    }
+
+    .nav-btn.next {
+      right: 0;
+    }
+
+    dialog {
+      position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  max-width: 95vw;
+  max-height: 95vh;
+  width: 1400px;
+  height: 1000px;
+  background: #000;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    dialog::backdrop {
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #5271ff 0%, #ff1616 100%);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .close-btn:focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .modal-content {
+      width: 100%;
+      height: calc(100% - 66px);
+    }
+
+    .modal-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .banner {
+        height: 150px;
+      }
+
+      .search-input {
+        font-size: 1rem;
+        padding: 14px 45px 14px 18px;
+      }
+
+      .carousel-container {
+        padding: 0 40px;
+      }
+
+      .card {
+        flex: 0 0 220px;
+      }
+
+      .nav-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+      }
+
+      dialog {
+        width: 100%;
+        height: 100%;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .banner {
+        height: 120px;
+        border-radius: 12px;
+      }
+
+      .banner-container {
+        padding: 15px 15px 0;
+        margin-bottom: 20px;
+      }
+
+      .content-wrapper {
+        padding: 0 15px 15px;
+      }
+
+      .search-container {
+        margin-bottom: 30px;
+      }
+
+      .card {
+        flex: 0 0 180px;
+      }
+
+      .card-preview {
+        height: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Место для баннера -->
+  <div class="banner-container">
+    <div class="banner">
+      <!-- Добавьте сюда ваше изображение: -->
+      <img src="images/banner.jpg" alt="Баннер"> -->
+     
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <h1>🎮 Magic English Games</h1>
+
+    <!-- Поиск по тегам -->
+    <div class="search-container">
+      <input 
+        type="search" 
+        class="search-input" 
+        id="search-input"
+        placeholder="🔍 Поиск игр по тегам..."
+        aria-label="Поиск игр по тегам"
+      >
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div id="sections-container"></div>
+    <div id="no-results" class="no-results" style="display: none;">
+      Игры не найдены 😔
+    </div>
+	<footer class="footer">
+      <a href="https://vk.com/magicenglishal" class="subscribe-btn" target="_blank" rel="noopener noreferrer">
+        <img src="images/logo.jpg" alt="Логотип" style="width: 35px; height: 35px; border-radius: 50%;">
+        <span>Subscribe for more!</span>
+      </a>
+    </footer>
+  </div>
+
+  <dialog id="game-modal" aria-labelledby="modal-title" aria-modal="true">
+    <div class="modal-header">
+      <h2 id="modal-title" class="modal-title"></h2>
+      <button class="close-btn" aria-label="Закрыть" title="Закрыть (Esc)">×</button>
+    </div>
+    <div class="modal-content">
+      <iframe id="game-frame" title="Игра" allowfullscreen></iframe>
+    </div>
+  </dialog>
+
+  <script>
+    // ============================================
+    // ДАННЫЕ ИГР
+    // ============================================
+    // Чтобы добавить свои игры:
+    // 1. Скопируйте один объект игры { title: "...", url: "...", ... }
+    // 2. Измените title, url (ссылка на игру), preview (emoji или ссылка на картинку), tags
+    // 3. Добавьте объект в нужную категорию (action, puzzle, arcade)
+    // 4. Можете создать новые категории, добавив их в объект gamesData
+    
+    const gamesData = {
+      action: {
+        title: "Grammar games",
+        games: [
+          {
+            title: "Tic-Tac-Toe have/has got",
+            url: "https://magicenglish45-sketch.github.io/Tic-tac-toe/", //
+            preview: "images/game1.jpg",
+            tags: ["have got", "Tic-Tac-Toe"]
+          },
+          {
+            title: "Fruit Catch",
+            url: "https://magicenglish45-sketch.github.io/Fruit-catch-grammar/", // 
+            preview: "images/game2.jpg",
+            tags: ["Present Simple", "Present Continuous"]
+          },
+		  {
+		  title: "Escape Maze",
+            url: "https://magicenglish45-sketch.github.io/escape-maze-/", // 
+            preview: "images/game3.jpg",
+            tags: ["Past Simple"]
+			}
+        ]
+      },
+      puzzle: {
+        title: "Puzzles",
+        games: [
+          {
+            title: "Animal Memory Game",
+            url: "https://magicenglish45-sketch.github.io/animal-memory-game/", // ВСТАВЬТЕ ССЫЛКУ НА ВАШУ ИГРУ ЗДЕСЬ
+            preview: "images/game4.jpg",
+            tags: ["to be", "memory"]
+          },
+		  {
+            title: "Checkers Past Simple",
+            url: "https://magicenglish45-sketch.github.io/checkers/", // ВСТАВЬТЕ ССЫЛКУ НА ВАШУ ИГРУ ЗДЕСЬ
+            preview: "images/game5.jpg",
+            tags: ["past simple", "checkers"]
+          }
+        ]
+      },
+      arcade: {
+        title: "Аркады",
+        games: []
+      }
+    };
+
+    // ============================================
+    // ЛОГИКА ПРИЛОЖЕНИЯ
+    // ============================================
+
+    const sectionsContainer = document.getElementById('sections-container');
+    const modal = document.getElementById('game-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const gameFrame = document.getElementById('game-frame');
+    const closeBtn = document.querySelector('.close-btn');
+    const searchInput = document.getElementById('search-input');
+    const noResults = document.getElementById('no-results');
+
+    let allGames = [];
+
+    // Создание секций с каруселями
+    function createSections(filter = '') {
+      sectionsContainer.innerHTML = '';
+      let hasResults = false;
+
+      Object.entries(gamesData).forEach(([key, section]) => {
+        const filteredGames = section.games.filter(game => {
+          if (!filter) return true;
+          const searchLower = filter.toLowerCase();
+          return game.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
+                 game.title.toLowerCase().includes(searchLower);
+        });
+
+        if (filteredGames.length === 0) return;
+        hasResults = true;
+
+        const sectionDiv = document.createElement('div');
+        sectionDiv.className = 'section';
+        sectionDiv.innerHTML = `
+          <h2 class="section-title">${section.title}</h2>
+          <div class="carousel-container">
+            <button class="nav-btn prev" aria-label="Предыдущий слайд" data-carousel="${key}">‹</button>
+            <div class="carousel" id="carousel-${key}" role="region" aria-label="${section.title}">
+              ${filteredGames.map((game, index) => `
+                <div class="card" 
+                     tabindex="0" 
+                     role="button"
+                     data-url="${game.url}"
+                     data-title="${game.title}"
+                     aria-label="Открыть игру ${game.title}">
+                  <div class="card-preview">
+                    ${game.preview.startsWith('http') || game.preview.includes('/') || game.preview.includes('.jpg') || game.preview.includes('.png') || game.preview.includes('.gif')
+  ? `<img src="${game.preview}" alt="${game.title}">`
+  : game.preview
+
+                    }
+                  </div>
+                  <div class="card-title">${game.title}</div>
+                  <div class="card-tags">
+                    ${game.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <button class="nav-btn next" aria-label="Следующий слайд" data-carousel="${key}">›</button>
+          </div>
+        `;
+        sectionsContainer.appendChild(sectionDiv);
+      });
+
+      noResults.style.display = hasResults ? 'none' : 'block';
+    }
+
+    // Открытие модального окна
+    function openModal(url, title) {
+      if (!url) {
+        alert('Ссылка на игру не указана. Добавьте URL в массив gamesData.');
+        return;
+      }
+      modalTitle.textContent = title;
+      gameFrame.src = url;
+      modal.showModal();
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Закрытие модального окна
+    function closeModal() {
+      modal.close();
+      gameFrame.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // Навигация по карусели
+    function scrollCarousel(carouselId, direction) {
+      const carousel = document.getElementById(`carousel-${carouselId}`);
+      const cardWidth = carousel.querySelector('.card').offsetWidth + 20;
+      const scrollAmount = direction === 'next' ? cardWidth * 2 : -cardWidth * 2;
+      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+
+    // Инициализация событий
+    createSections();
+
+    // Поиск по тегам
+    searchInput.addEventListener('input', (e) => {
+      createSections(e.target.value);
+    });
+
+    // Клики по карточкам
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (card) {
+        openModal(card.dataset.url, card.dataset.title);
+      }
+    });
+
+    // Enter/Space на карточках
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('card')) {
+        e.preventDefault();
+        openModal(e.target.dataset.url, e.target.dataset.title);
+      }
+      
+      // Esc для закрытия
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // Закрытие модалки
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Навигация карусели
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('nav-btn')) {
+        const direction = e.target.classList.contains('next') ? 'next' : 'prev';
+        const carouselId = e.target.dataset.carousel;
+        scrollCarousel(carouselId, direction);
+      }
+    });
+  </script>
+</body>
+</html>
